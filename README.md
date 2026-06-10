@@ -40,4 +40,4 @@ I built this project to learn enterprise-level IAM in Microsoft Entra ID.
 Currently learning advanced IAM through hands-on labs in Microsoft Entra ID.
 
 🔗 LinkedIn: [your URL]  
-🐙 GitHub: [your URL]
+🐙 GitHub: https://github.com/tilak-14
