@@ -1,0 +1,374 @@
+Project Name: Secure Tenant Bootstrap for Contoso Finance Services
+
+Departments:
+- Finance
+- IT
+- Sales
+- HR
+
+Security Goals:
+- Group-based access
+- MFA for all users
+- Break-glass admin accounts
+- Location-based restrictions
+- SSPR enabled
+- Monitoring through logs
+
+Naming Standard:
+Users:
+firstname.department
+
+Groups:
+GG-Finance-Users
+GG-IT-Users
+GG-Sales-Users
+GG-HR-Users
+DG-India-Users
+GG-Admins
+
+
+
+=========================================
+DAY 3 — SECURITY GROUPS DESIGN
+=========================================
+
+Groups created:
+
+1. GG-Finance-Users
+   Purpose: Finance dept access
+   Type: Security (assigned)
+   Members: 4
+
+2. GG-IT-Users
+   Purpose: IT dept access
+   Type: Security (assigned)
+   Members: 4
+
+3. GG-Sales-Users
+   Purpose: Sales dept access
+   Type: Security (assigned)
+   Members: 4
+
+4. GG-HR-Users
+   Purpose: HR dept access
+   Type: Security (assigned)
+   Members: 4
+
+5. GG-Admins
+   Purpose: Privileged admin access
+   Type: Security (assigned)
+   Members: 1
+
+6. GG-BreakGlass
+   Purpose: Emergency admin access
+   Type: Security (assigned)
+   Members: 0 (to be filled on Day 5)
+
+Design Rationale:
+- Department-based segregation
+- Clean access boundaries
+- Scalable for onboarding
+- Audit-friendly structure
+
+Naming Convention Used:
+GG = Global Group (assigned)
+DG = Dynamic Group (rule-based, Day 4)
+
+
+
+
+
+
+=========================================
+DAY 4 — DYNAMIC GROUPS (AUTOMATION)
+=========================================
+
+Dynamic Groups Created:
+
+1. DG-AllFinance-Users
+   Rule: user.department -eq "Finance"
+   Purpose: Auto-membership for Finance team
+   Initial members: 4
+   Use case: Will be used for Finance app access
+
+2. DG-India-Users
+   Rule: user.country -eq "IN"
+   Purpose: Auto-membership for India users
+   Initial members: 11
+   Use case: Will be used for India-only CA policy
+
+Automation Test Results:
+- Karan Mehta department changed Sales → Finance
+- Within 5 minutes, auto-added to DG-AllFinance-Users
+- Reverted successfully when changed back
+
+Design Rationale:
+- GG- groups (manual) for stable access boundaries
+- DG- groups (rule-based) for attribute-driven automation
+- Layered strategy reduces admin overhead by ~80%
+
+Pitfalls Documented:
+- Case-sensitive values
+- ISO country codes (IN, not India)
+- 3-10 min evaluation delay
+- Cannot nest groups
+
+
+
+=========================================
+DAY 5 — MONITORING APPROACH (REVISED)
+=========================================
+
+Reason for change:
+Developer tenant does not include Azure subscription.
+Sentinel/Log Analytics require paid subscription.
+Switched to Power Automate-based alerting (free, real-time).
+
+Architecture:
+Microsoft Graph API → Power Automate (every 5 min)
+                   → Email + Teams alert
+                   → To: <admin email>
+
+Components Created:
+1. App Registration: BreakGlass-Monitor-App
+   Permissions: AuditLog.Read.All, Directory.Read.All
+   
+2. Power Automate Flow: BreakGlass Sign-In Monitor
+   Trigger: Every 5 minutes
+   Action: Query Graph → check breakglass logins → email alert
+
+3. Manual backup: Saved sign-in log filter "BreakGlass-Monitor"
+   Daily review at 9:00 AM
+
+Test Results:
+- 2026-05-27: Test sign-in with breakglass1 → alert received in 4 min ✅
+- Email contained: UPN, IP, location, app, timestamp
+
+Cost: ₹0 (uses dev tenant Power Automate license)
+
+Future Migration:
+If production deployment → migrate to Sentinel for real-time alerting.
+Same KQL query reusable.
+
+
+
+
+
+=========================================
+DAY 6 — MFA VIA CONDITIONAL ACCESS
+=========================================
+
+Policy Created:
+Name: CA001 — Require MFA for All Users
+
+Configuration:
+- Users: All users
+- Exclude: GG-BreakGlass
+- Cloud apps: All cloud apps
+- Grant: Require MFA
+- State: Enabled (after pilot)
+
+Rollout Strategy:
+1. Disabled Security Defaults (prerequisite)
+2. Enabled MFA Registration policy (P2 feature)
+3. Created CA001 in Report-only mode
+4. Validated with What If tool (3 scenarios)
+5. Piloted with GG-IT-Users (4 users)
+6. Verified pilot success in sign-in logs
+7. Expanded to All Users
+
+What If Tests Performed:
+- Regular user (Rahul) → MFA required ✅
+- Break-glass (BG1) → No policies applied ✅
+- External country (Russia) → MFA required ✅
+
+Verification Results:
+- 11 users prompted for MFA on next sign-in ✅
+- Break-glass accounts unaffected ✅
+- IT team MFA registered ✅
+
+Why Report-only first:
+Microsoft's recommended pattern for any CA policy.
+Zero risk of accidental lockout.
+Real data before enforcement.
+
+Why pilot before broad rollout:
+Canary deployment principle.
+If something breaks, only 4 users affected, not 16.
+
+Lessons Learned:
+- Security Defaults must be OFF for CA to work
+- MFA registration policy should come BEFORE enforcement
+- What If tool is essential for pre-flight validation
+- Break-glass exclusion must be tested explicitly
+
+
+
+=========================================
+DAY 7 — SELF-SERVICE PASSWORD RESET (SSPR)
+=========================================
+
+Configuration:
+
+Scope:
+- Pilot: GG-IT-Users (4 users)
+- Production: All users (after pilot validation)
+
+Authentication Methods Required: 2
+Enabled methods:
+  - Mobile app notification (Authenticator push) ✅
+  - Mobile app code ✅
+  - Email ✅
+Disabled methods:
+  - Security questions (deprecated, phishable)
+  - Office phone (outdated)
+  - Mobile phone SMS (kept optional, SIM swap risk)
+
+Registration:
+- Required at next sign-in: Yes
+- Re-confirmation period: 180 days
+
+Notifications:
+- Notify user on password reset: Yes
+- Notify other admins on admin reset: Yes (critical for security)
+
+Test Results:
+- Test user: priya.it@yourtenant.onmicrosoft.com
+- Registration flow: ✅ Completed in 3 minutes
+- Reset flow at aka.ms/sspr: ✅ Worked end-to-end
+- Time taken: 2 minutes
+- New password validated by signing into portal.office.com ✅
+- Notification email received ✅
+
+Audit Trail:
+- 4 audit events captured in Audit Logs
+- Service: Self-service Password Management
+- Full traceability confirmed
+
+Business Value:
+- Helpdesk ticket reduction: ~50-70%
+- Cost saving estimate: $70/ticket avoided
+- User productivity: ~30 min saved per reset
+
+Future Considerations (Phase 6):
+- Password writeback for hybrid scenarios
+- Custom branding for SSPR page (organizational identity)
+- Banned password list (already configured in Authentication methods)
+
+
+
+
+
+
+=========================================
+DAY 8 — LOCATION-BASED CONDITIONAL ACCESS
+=========================================
+
+Named Locations Created:
+
+1. Trusted-India
+   Definition: Countries → India
+   Lookup: GPS or IP
+   Used by: CA220
+
+2. Blocked-RiskyCountries
+   Definition: 8 countries (KP, IR, RU, CN, CU, SY, BY, VE)
+   Lookup: GPS or IP
+   Used by: CA221
+
+3. Trusted-OfficeIP-Bengaluru (optional)
+   Definition: IP range (placeholder)
+   Marked as trusted: Yes
+   Use case: Future "skip MFA from office" pattern
+
+CA Policies Created:
+
+CA220 — Allow Sign-ins from India Only
+- Users: All users
+- Exclude: GG-BreakGlass, GG-Travel-Exception-Temporary
+- Cloud apps: All
+- Condition: Locations → Any location, exclude Trusted-India
+- Grant: Block access
+- State: On (after report-only validation)
+
+CA221 — Block Sign-ins from Risky Countries
+- Users: All users
+- Exclude: GG-BreakGlass
+- Cloud apps: All
+- Condition: Locations → Blocked-RiskyCountries
+- Grant: Block access
+- State: On (after report-only validation)
+
+Why two policies (layered defense):
+- CA220 = allowlist (India only)
+- CA221 = denylist (specific risky countries)
+- Even if CA220 has exceptions, CA221 still blocks high-risk countries
+
+Travel Exception Process:
+- Group: GG-Travel-Exception-Temporary
+- Process: Manager approval → Security team adds user → Time-bound
+- Automation: Power Automate flow removes expired members daily
+
+What If Tests Performed:
+- Indian user from India: ✅ Allowed
+- Indian user from US (legitimate travel): ❌ Blocked (correct — needs exception)
+- Break-glass from Russia: ✅ Allowed (correct — exclusion works)
+- Regular user from North Korea: ❌ Blocked by both CA220 + CA221
+
+Security Posture After Today:
+- MFA enforced (CA001) — blocks 99.9% of attacks
+- India-only access (CA220) — blocks geographic mismatch
+- Risky country denylist (CA221) — defense-in-depth
+- Layered approach = defense at multiple levels
+
+Business Value:
+- Prevents credential stuffing attacks from outside India
+- Aligns with data residency/compliance requirements
+- Auditable trail for security questionnaires
+- Real-world relevant for Wipfli-style India operations
+
+
+
+=========================================
+DAY 8 — POLICY INTERACTION ANALYSIS
+=========================================
+
+Question raised:
+"What if a travel-exception user signs in from North Korea?"
+
+Analysis:
+
+CA220 (India-only):
+- Travel exception group excluded → CA220 skipped
+- Result: would allow
+
+CA221 (Risky country block):
+- Travel exception group NOT excluded → CA221 applies
+- Country = North Korea (in risky list)
+- Result: BLOCK ✅
+
+Final outcome: BLOCKED by CA221.
+
+Why this design is correct:
+- Business need: occasional international travel (CA220 flexibility)
+- Security need: never allow sanctioned countries (CA221 strict)
+- These are different concerns; should be separate policies
+
+Lesson:
+Exclusions are per-policy, not global. This gives surgical control.
+
+Three-tier trust model in our tenant:
+- Tier 1 (Break-glass): No location restriction
+- Tier 2 (Travel exception): Most countries OK, risky countries blocked
+- Tier 3 (Regular users): India only
+
+Extreme edge case:
+If someone genuinely needs access from a sanctioned country:
+- Create GG-RiskyCountry-Exception-Approved (CISO approval required)
+- Add to CA221 exclusion
+- Create CA222 with ultra-strict requirements:
+  * FIDO2 MFA only (phishing-resistant)
+  * Compliant device required
+  * Sign-in frequency: 1 hour
+  * Continuous Access Evaluation enabled
+
