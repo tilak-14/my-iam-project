@@ -1,0 +1,17 @@
+DisplayName,UserPrincipalName,MailNickname,GivenName,Surname,JobTitle,Department,Country,City,UsageLocation,Password,AccountEnabled
+Rahul Verma,rahul.finance@yourtenant.onmicrosoft.com,rahul.finance,Rahul,Verma,Finance Analyst,Finance,IN,Bengaluru,IN,TempPass@2026!,True
+Aditi Rao,aditi.finance@yourtenant.onmicrosoft.com,aditi.finance,Aditi,Rao,Senior Finance Analyst,Finance,IN,Mumbai,IN,TempPass@2026!,True
+Lee Chen,lee.finance@yourtenant.onmicrosoft.com,lee.finance,Lee,Chen,Finance Manager,Finance,US,New York,US,TempPass@2026!,True
+Sneha Kapoor,sneha.finance@yourtenant.onmicrosoft.com,sneha.finance,Sneha,Kapoor,Accounts Executive,Finance,IN,Delhi,IN,TempPass@2026!,True
+Arun Das,arun.it@yourtenant.onmicrosoft.com,arun.it,Arun,Das,Systems Engineer,IT,IN,Bengaluru,IN,TempPass@2026!,True
+Priya Menon,priya.it@yourtenant.onmicrosoft.com,priya.it,Priya,Menon,IAM Engineer,IT,IN,Chennai,IN,TempPass@2026!,True
+Vikram Singh,vikram.it@yourtenant.onmicrosoft.com,vikram.it,Vikram,Singh,Cloud Engineer,IT,IN,Pune,IN,TempPass@2026!,True
+Emma Walters,emma.it@yourtenant.onmicrosoft.com,emma.it,Emma,Walters,IT Manager,IT,US,Seattle,US,TempPass@2026!,True
+John Miller,john.sales@yourtenant.onmicrosoft.com,john.sales,John,Miller,Sales Manager,Sales,US,Chicago,US,TempPass@2026!,True
+Karan Mehta,karan.sales@yourtenant.onmicrosoft.com,karan.sales,Karan,Mehta,Sales Executive,Sales,IN,Mumbai,IN,TempPass@2026!,True
+Riya Sharma,riya.sales@yourtenant.onmicrosoft.com,riya.sales,Riya,Sharma,Sales Associate,Sales,IN,Hyderabad,IN,TempPass@2026!,True
+Ben Carter,ben.sales@yourtenant.onmicrosoft.com,ben.sales,Ben,Carter,Account Executive,Sales,US,Boston,US,TempPass@2026!,True
+Meera Nair,meera.hr@yourtenant.onmicrosoft.com,meera.hr,Meera,Nair,HR Business Partner,HR,IN,Kochi,IN,TempPass@2026!,True
+Anil Kumar,anil.hr@yourtenant.onmicrosoft.com,anil.hr,Anil,Kumar,HR Executive,HR,IN,Bengaluru,IN,TempPass@2026!,True
+Divya Iyer,divya.hr@yourtenant.onmicrosoft.com,divya.hr,Divya,Iyer,Talent Acquisition,HR,IN,Chennai,IN,TempPass@2026!,True
+Sara Lopez,sara.hr@yourtenant.onmicrosoft.com,sara.hr,Sara,Lopez,HR Manager,HR,US,Austin,US,TempPass@2026!,True
