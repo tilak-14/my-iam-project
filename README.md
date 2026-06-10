@@ -36,3 +36,11 @@ I built this project to learn enterprise-level IAM in Microsoft Entra ID.
 - `/scripts/data/` — CSV files for bulk operations
 - `notes.txt` — Project design notes
 - `README.md` — This file
+
+## 👤 About Me
+
+**Tilak Kalas** — IAM Engineer, Bengaluru  
+Currently learning advanced IAM through hands-on labs in Microsoft Entra ID.  
+
+🔗 LinkedIn: [your LinkedIn URL]  
+🐙 GitHub: [your GitHub profile URL]
