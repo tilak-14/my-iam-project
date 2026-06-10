@@ -20,3 +20,16 @@ I built this project to learn enterprise-level IAM in Microsoft Entra ID.
 ## Outcome:
 - Validated all 10 controls with sign-in & audit logs
 - Wrote a security verification report
+
+## 📁 Repository Structure
+
+- `/scripts/` — PowerShell automation scripts
+  - `01_BulkCreateUsers.ps1` — Create 16 users
+  - `02_CreateGroups.ps1` — Create security groups
+  - `03_CreateDynamicGroups.ps1` — Create dynamic groups
+  - `04_CreateBreakGlass.ps1` — Emergency admin accounts
+  - `05_AuditScript.ps1` — Audit report generator
+  - `06_RunTestScenarios.ps1` — Day 9 automated tests
+- `/scripts/data/` — CSV files for bulk operations
+- `notes.txt` — Project design notes
+- `README.md` — This file
