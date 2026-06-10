@@ -1,7 +1,7 @@
 # My IAM Project — Mock Company Tenant
 
-![Status](https://img.shields.io/badge/status-completed-success)
-![Platform](https://img.shields.io/badM%20Foundation-green
+![Status](https://img.shields.ioadge/platform-Microsoft%20Entra%20ID-blue
+![Project](https://img.shields.io/badge/project-IAM%20Foundation-green)
 
 I built this project to learn enterprise-level IAM in Microsoft Entra ID.
 
@@ -40,7 +40,7 @@ I built this project to learn enterprise-level IAM in Microsoft Entra ID.
 ## 👤 About Me
 
 **Tilak Kalas** — IAM Engineer, Bengaluru  
-Currently learning advanced IAM through hands-on labs in Microsoft Entra ID.  
+Currently learning advanced IAM through hands-on labs in Microsoft Entra ID.
 
-🔗 LinkedIn: [your LinkedIn URL]  
-🐙 GitHub: [your GitHub profile URL]
+🔗 LinkedIn: [your URL]  
+🐙 GitHub: [your URL]
