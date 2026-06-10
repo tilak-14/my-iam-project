@@ -1,8 +1,5 @@
 # My IAM Project — Mock Company Tenant
 
-![Status](https://img.shields.ioadge/platform-Microsoft%20Entra%20ID-blue
-![Project](https://img.shields.io/badge/project-IAM%20Foundation-green)
-
 I built this project to learn enterprise-level IAM in Microsoft Entra ID.
 
 ## What I built:
